@@ -1,21 +1,25 @@
-FROM thomasweise/docker-texlive-full:1.0
+FROM debian:bullseye
 
-COPY requirements.txt ./requirements.txt
-
+# Install LaTeX and Python
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -qy --no-install-recommends python3 python3-pip && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    texlive-full \
+    python3 \
+    python3-pip && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    python3 -m pip install -r requirements.txt && \
-    mkdir /working && \
-    mkdir -p /var/www/app
+    rm -rf /var/lib/apt/lists/*
 
-ENV LC_ALL=C.UTF-8
-ENV LANG=C.UTF-8
-ENV CELERY_LOG_LEVEL=info
-ENV COMPONENT=web
-ENV FLASK_ENV=production
+# Create and set working directory
+WORKDIR /app
 
-COPY ./ /var/www/app
+# Copy app files
+COPY . .
 
-CMD /var/www/app/run.sh
+# Install Python dependencies
+RUN pip3 install -r requirements.txt
+
+# Create folders for LaTeX compilation
+RUN mkdir /working && mkdir -p /var/www/app
+
+# Set default command
+CMD ["python3", "app.py"]
