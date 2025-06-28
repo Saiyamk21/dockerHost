@@ -22,4 +22,5 @@ RUN pip3 install -r requirements.txt
 RUN mkdir /working && mkdir -p /var/www/app
 
 # Set default command
-CMD ["python3", "app.py"]
+CMD ["python3", "compile_service.py"]
+
