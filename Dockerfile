@@ -1,6 +1,5 @@
 FROM debian:bullseye
 
-# Install LaTeX and Python
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     texlive-full \
@@ -9,18 +8,13 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Create and set working directory
 WORKDIR /app
 
-# Copy app files
 COPY . .
 
-# Install Python dependencies
 RUN pip3 install -r requirements.txt
 
-# Create folders for LaTeX compilation
 RUN mkdir /working && mkdir -p /var/www/app
 
-# Set default command
-CMD ["python3", "compile_service.py"]
+CMD ["python3", "wsgi.py"]
 
