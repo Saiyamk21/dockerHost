@@ -6,3 +6,4 @@ rq==1.5.2
 rq-scheduler==0.10.0
 gunicorn==20.0.4
 celery==5.2.2
+jinja2<3.1
